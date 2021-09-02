@@ -1,25 +1,13 @@
-# import sys
-
-class Manager:
-    def __init__(self):
-        self.callbacks = {}
-        self.actions = {}
-        self.balance = 0
-
-    def assign(self, action, count):
-        def decorate(callback):
-            self.callbacks[action] = callback
-            self.actions[action] = count
-        return decorate
-
+from accountant_manager import Manager, File
 
 manager = Manager()
+file = File()
 
 
 @manager.assign("balance", 2)
 def balance(data):
     amount = data[0]
-    comment = data[1]
+    comment = data[1]  # comment?
     if manager.balance + amount < 0:
         print("No funds in the account.")
     else:
@@ -44,6 +32,15 @@ def purchase(data):
 
 @manager.assign("sales", 3)
 def sales(data):
-    value = data[0]
-    comment = data[1]
+    quantity = data[0]
+    product = data[1]
     price = data[2]
+    if product not in manager.callbacks:
+        print("Item out of stock.")
+    if manager.callbacks[product] < quantity:
+        print("Insufficient stock.")
+    else:
+        manager.callbacks[product] -= quantity
+    if price < 0 or quantity < 0:
+        print("Error! Negative value.")
+        manager.balance += price * quantity
