@@ -1,7 +1,9 @@
+import sys
 from accountant_manager import Manager, File
 
 manager = Manager()
-file = File()
+file = File(filepath=sys.argv[1])
+file.readfile()
 
 
 @manager.assign("balance", 2)
