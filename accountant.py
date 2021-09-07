@@ -8,8 +8,8 @@ file.readfile()
 
 @manager.assign("balance", 2)
 def balance(data):
-    amount = data[0]
-    comment = data[1]  # comment?
+    amount = int(data[0])
+    comment = data[1]
     if manager.balance + amount < 0:
         print("No funds in the account.")
     else:
@@ -46,3 +46,9 @@ def sales(data):
     if price < 0 or quantity < 0:
         print("Error! Negative value.")
         manager.balance += price * quantity
+
+
+manager.write_history(file.tasks)
+manager.run()
+file.readfile()
+print(manager.balance)
