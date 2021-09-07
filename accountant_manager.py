@@ -11,19 +11,19 @@ class Manager:
             self.actions[action] = count
         return decorate
 
-    def history(self, activities):
+    def write_history(self, activities):
         while activities:
             act = activities.pop()
             data = []
-            if act in self.actions_args:
-                for i in range(self.action_args[act]):
+            if act in self.actions:
+                for i in range(self.actions[act]):
                     data.append(activities.pop())
+                self.history.append((act, data))
 
-    def execute(self, action, *args, **kwargs):
-        if action not in self.actions:
-            pass
-        else:
-            self.actions[action][0](self, *args, **kwargs)
+    def run(self):
+        for act, data in self.history:
+            if act in self.callbacks:
+                self.callbacks[act](data)
 
 
 class File:
