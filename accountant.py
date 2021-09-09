@@ -18,15 +18,15 @@ def balance(data):
 
 @manager.assign("purchase", 3)
 def purchase(data):
-    quantity = data[0]
-    product = data[1]
-    price = data[2]
-    if manager.balance < int(price * quantity):
+    product = data[0]
+    price = int(data[1])
+    quantity = int(data[2])
+    if manager.balance < price * quantity:
         print("Insufficient funds to purchase.")
-    if product in manager.callbacks:
-        manager.callbacks[product] += quantity
+    if product in manager.warehouse:
+        manager.warehouse[product] += quantity
     else:
-        manager.callbacks[product] = quantity
+        manager.warehouse[product] = quantity
     manager.balance -= price * quantity
     if price < 0 or quantity < 0:
         print("Error! Negative value.")
@@ -34,21 +34,18 @@ def purchase(data):
 
 @manager.assign("sales", 3)
 def sales(data):
-    quantity = data[0]
-    product = data[1]
-    price = data[2]
-    if product not in manager.callbacks:
+    product = data[0]
+    price = int(data[1])
+    quantity = int(data[2])
+    if product not in manager.warehouse:
         print("Item out of stock.")
-    if manager.callbacks[product] < quantity:
+    if quantity > manager.warehouse[product]:
         print("Insufficient stock.")
     else:
-        manager.callbacks[product] -= quantity
+        manager.warehouse[product] -= quantity
     if price < 0 or quantity < 0:
         print("Error! Negative value.")
         manager.balance += price * quantity
 
 
 manager.write_history(file.tasks)
-manager.run()
-file.readfile()
-print(manager.balance)
