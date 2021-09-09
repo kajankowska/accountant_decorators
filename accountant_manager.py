@@ -3,6 +3,7 @@ class Manager:
         self.callbacks = {}
         self.actions = {}
         self.history = []
+        self.warehouse = {}
         self.balance = 0
 
     def assign(self, action, count):
@@ -13,11 +14,11 @@ class Manager:
 
     def write_history(self, activities):
         while activities:
-            act = activities.pop()
+            act = activities.pop(0)
             data = []
             if act in self.actions:
                 for i in range(self.actions[act]):
-                    data.append(activities.pop())
+                    data.append(activities.pop(0))
                 self.history.append((act, data))
 
     def run(self):
